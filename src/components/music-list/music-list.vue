@@ -124,11 +124,12 @@ export default {
         return
       }
       getRecommendListDetail(id).then((res) => {
+        console.log(res)
         if (res.status === ERR_OK) {
-          console.log(res.data)
-          this.listDetail = res.data.playlist.tracks .map((item) => {
+          console.log(res.data.playlist.tracks)
+          this.listDetail = res.data.playlist.tracks
+          this.listDetail.map((item) => {
             return createRecommendListSong(item)
-
           })
         } else {
           console.error('getRecommendListDetail 获取失败！')
@@ -199,10 +200,12 @@ export default {
     height: 44px;
     color:$color-theme;
     z-index: 100;
+    // background: $color-theme;
     .back {
       position: absolute;
       top: 0;
       left: 4px;
+      color: #fff;
       .fa-angle-left {
         padding: 5px 10px;
         font-size: 30px;
@@ -213,6 +216,7 @@ export default {
       left: 38px;
       line-height: 44px;
       font-size: $font-size-medium-x;
+      color: #fff;
       @include no-wrap()
     }
   }
