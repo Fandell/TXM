@@ -157,9 +157,9 @@ export default {
         this.headerTitle = '歌单'
       }
       if (newY < 0) {
-        this.$refs.header.style.background = `rgba(212, 68, 57, ${percent})`
+        this.$refs.header.style.background = `rgba(49, 194, 102, ${percent})`
       } else {
-        this.$refs.header.style.background = `rgba(212, 68, 57, 0)`
+        this.$refs.header.style.background = `rgba(49, 194, 102, 0)`
       }
       // console.log(this.minTranslateY + RESERVED_HEIGHT)
       // if (translateY )
