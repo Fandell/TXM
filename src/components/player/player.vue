@@ -107,7 +107,7 @@ import {shuffle} from 'common/js/utl'
 export default {
   data () {
     return {
-      // id: '',
+      id: '',
       url: '',
       songReady: false,
       currentTime: 0,
