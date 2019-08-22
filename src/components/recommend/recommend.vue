@@ -1,26 +1,14 @@
 <template>
-  <div class="recommend" ref="recommend" >
+  <div class="recommend" ref="recommend">
     <scroll class="recommend-content" ref="scroll" :data="playList">
       <div>
         <div v-show="banner.length" class="decorate" v-if="banner.length"></div>
         <div v-if="banner.length" class="slider-wrapper">
           <slider>
             <div v-for="item in banner" :key="item.id" @click.stop="selectBanner(item)">
-              <img :src="item.imageUrl">
+              <img :src="item.imageUrl" />
             </div>
           </slider>
-        </div>
-        <div class="recommend-song" ref="recommendSong">
-          <h1 class="title">推荐歌曲</h1>
-          <ul>
-            <li class="item" v-for="item in recommendMusic" :key="item.id" @click="selectSong(item)">
-              <div class="icon">
-                <img v-lazy="item.image">
-              </div>
-              <p class="text">{{item.name}}</p>
-              <p class="singer">{{item.singer}}</p>
-            </li>
-          </ul>
         </div>
         <div class="recommend-list" ref="recommendList">
           <h1 class="title">推荐歌单</h1>
@@ -28,7 +16,7 @@
             <li class="item" v-for="item in playList" :key="item.id">
               <div class="icon" @click="selectList(item)">
                 <div class="gradients"></div>
-                <img v-lazy="item.picUrl">
+                <img v-lazy="item.picUrl" />
               </div>
               <p class="play-count">
                 <i class="fa fa-headphones"></i>
@@ -40,7 +28,23 @@
             </li>
           </ul>
         </div>
-
+        <div class="recommend-song" ref="recommendSong">
+          <h1 class="title">推荐歌曲</h1>
+          <ul>
+            <li
+              class="item"
+              v-for="item in recommendMusic"
+              :key="item.id"
+              @click="selectSong(item)"
+            >
+              <div class="icon">
+                <img v-lazy="item.image" />
+              </div>
+              <p class="text">{{item.name}}</p>
+              <p class="singer">{{item.singer}}</p>
+            </li>
+          </ul>
+        </div>
       </div>
     </scroll>
     <router-view></router-view>
@@ -48,28 +52,28 @@
 </template>
 
 <script>
-import Scroll from 'base/scroll/scroll'
-import Slider from 'base/slider/slider'
-import {getBanner, getRecommendList, getRecommendMusic} from 'api/recommend'
-import {getSongDetail} from 'api/search'
-import {createRecommendSong} from 'common/js/song'
-import {ERR_OK} from 'common/js/config'
-import {mapMutations, mapActions} from 'vuex'
-import {playlistMixin} from 'common/js/mixin'
+import Scroll from "base/scroll/scroll";
+import Slider from "base/slider/slider";
+import { getBanner, getRecommendList, getRecommendMusic } from "api/recommend";
+import { getSongDetail } from "api/search";
+import { createRecommendSong } from "common/js/song";
+import { ERR_OK } from "common/js/config";
+import { mapMutations, mapActions } from "vuex";
+import { playlistMixin } from "common/js/mixin";
 
 export default {
   mixins: [playlistMixin],
-  data () {
+  data() {
     return {
       banner: [],
       playList: [],
       recommendMusic: []
-    }
+    };
   },
-  created () {
-    this._getBanner()
-    this._getRecommendList()
-    this._getRecommendMusic()
+  created() {
+    this._getBanner();
+    this._getRecommendList();
+    this._getRecommendMusic();
     // this.$refs.recommendList.style.
   },
   methods: {
@@ -77,94 +81,92 @@ export default {
     //   console.log('firstPlay')
     //   this.$refs.audio.play()
     // },
-    selectBanner (item) {
-      let regHttp = /^http/
-      let regSong = /\/song\?id/
+    selectBanner(item) {
+      let regHttp = /^http/;
+      let regSong = /\/song\?id/;
       if (regHttp.test(item.url)) {
-        window.open(item.url)
+        window.open(item.url);
       }
       if (regSong.test(item.url)) {
-        getSongDetail(item.targetId).then((res) => {
-          let m = res.data.songs[0]
+        getSongDetail(item.targetId).then(res => {
+          let m = res.data.songs[0];
           let song = {
             id: m.id,
             singer: m.ar[0].name,
             name: m.name,
             image: m.al.picUrl,
             album: m.al.name
-          }
-          this.insertSong(song)
-          this.setFullScreen(true)
-        })
+          };
+          this.insertSong(song);
+          this.setFullScreen(true);
+        });
       }
     },
-    selectSong (item) {
-      this.insertSong(item)
+    selectSong(item) {
+      this.insertSong(item);
     },
-    handlePlaylist (playlist) {
-      const bottom = playlist.length > 0 ? '60px' : ''
-      this.$refs.recommend.style.bottom = bottom
-      this.$refs.scroll.refresh()
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? "60px" : "";
+      this.$refs.recommend.style.bottom = bottom;
+      this.$refs.scroll.refresh();
     },
-    selectList (item) {
+    selectList(item) {
       this.$router.push({
         path: `/recommend/${item.id}`
-      })
+      });
       // console.log(item)
-      this.setMuiscList(item)
+      this.setMuiscList(item);
     },
-    _getBanner () {
-      getBanner().then((res) => {
+    _getBanner() {
+      getBanner().then(res => {
         if (res.status === ERR_OK) {
-          let list = res.data.banners
-          this.banner = list.splice(5)
-          console.log(this.banner)
+          let list = res.data.banners;
+          this.banner = list.splice(5);
+          console.log(this.banner);
         } else {
-          console.error('Banner 获取失败')
+          console.error("Banner 获取失败");
         }
-      })
+      });
     },
-    _getRecommendList () {
-      getRecommendList().then((res) => {
+    _getRecommendList() {
+      getRecommendList().then(res => {
         if (res.status === ERR_OK) {
-          this.playList = res.data.result
+          this.playList = res.data.result;
         } else {
-          console.error('getRecommendList 获取失败')
+          console.error("getRecommendList 获取失败");
         }
-      })
+      });
     },
-    _getRecommendMusic () {
-      getRecommendMusic().then((res) => {
+    _getRecommendMusic() {
+      getRecommendMusic().then(res => {
         if (res.status === ERR_OK) {
-          let list = res.data.result.map((item) => {
-            return createRecommendSong(item)
-          })
-          list.splice(9)
-          this.recommendMusic = list
+          let list = res.data.result.map(item => {
+            return createRecommendSong(item);
+          });
+          list.splice(9);
+          this.recommendMusic = list;
         } else {
-          console.error('getRecommendMusic 获取失败')
+          console.error("getRecommendMusic 获取失败");
         }
-      })
+      });
     },
     ...mapMutations({
-      setMuiscList: 'SET_MUSIC_LIST',
-      setFullScreen: 'SET_FULL_SCREEN'
+      setMuiscList: "SET_MUSIC_LIST",
+      setFullScreen: "SET_FULL_SCREEN"
     }),
-    ...mapActions([
-      'insertSong'
-    ])
+    ...mapActions(["insertSong"])
   },
   components: {
     Slider,
     Scroll
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 @import "~common/scss/variable";
 @import "~common/scss/mixin";
- .recommend {
+.recommend {
   position: fixed;
   width: 100%;
   top: 88px;
@@ -219,7 +221,10 @@ export default {
             width: 100%;
             height: 35px;
             border-radius: 3px;
-            background: linear-gradient(rgba(109, 109, 109, 0.4),rgba(255, 255, 255, 0));
+            background: linear-gradient(
+              rgba(109, 109, 109, 0.4),
+              rgba(255, 255, 255, 0)
+            );
           }
           img {
             width: 100%;
@@ -232,7 +237,7 @@ export default {
           top: 5px;
           right: 8px;
           font-size: $font-size-small-s;
-          color: $color-text-l
+          color: $color-text-l;
         }
         .text {
           float: left;
@@ -295,5 +300,5 @@ export default {
       }
     }
   }
- }
+}
 </style>

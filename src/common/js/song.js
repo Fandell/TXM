@@ -2,8 +2,10 @@
 export default class Song {
   constructor ({id, mid, singer, name, album, duration, image, url, aliaName}) {
     this.id = id
+    // console.log(id)
     this.singer = singer
     this.name = name
+    // console.log(name)
     this.album = album
     this.aliaName = aliaName
     // this.duration = duration
@@ -14,10 +16,11 @@ export default class Song {
 
 function singerName (arr) {
   let name = []
-  name = arr.map((item) => {
+  console.log(arr)
+  arr.map((item) => {
     return item.name
+    // console.log(item.name)
   })
-
   return name.join('/')
 }
 
